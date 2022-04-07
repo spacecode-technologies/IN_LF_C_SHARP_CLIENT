@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "bd151b95-3276-4175-85c8-7b8857f2d575": {
+      "ProjectGuid": "bd151b95-3276-4175-85c8-7b8857f2d575",
+      "DisplayName": "LF_SOCKET_CLIENT",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
