@@ -203,7 +203,12 @@ namespace LF_SOCKET_CLIENT
                 var json = JObject.Parse(response.GetValue(0).ToString());
                 var status = (bool)json.GetValue("status");
                 var message = json.GetValue("message").ToString();
-                ethDeviceSerial = json.GetValue("deviceSerialNumber").ToString();
+                try
+                {
+                    ethDeviceSerial = json.GetValue("deviceSerialNumber").ToString();
+                } catch (Exception e) {
+                    Console.WriteLine(e.Message);
+                }
                 connectDeviceEthDelegate(status, message);
             }, new
             {
