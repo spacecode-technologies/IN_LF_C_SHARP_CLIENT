@@ -634,14 +634,13 @@ namespace LF_SOCKET_CLIENT
 
         private void btnDisconnectEth_Click(object sender, EventArgs e)
         {
-            lfDevice.disconnectDeviceEth(selectedServiceSocketId, txtIpAddress.Text.Trim());
+            lfDevice.disconnectDeviceEth(selectedServiceSocketId);
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
             var socketId = usbDeviceList[usbDeviceSelection.SelectedIndex].socketId;
-            var deviceId = usbDeviceList[usbDeviceSelection.SelectedIndex].deviceId;
-            lfDevice.disconnectDeviceUsb(socketId, deviceId);
+            lfDevice.disconnectDeviceUsb(socketId);
         }
 
         private void btnStartScan_Click(object sender, EventArgs e)
@@ -655,7 +654,7 @@ namespace LF_SOCKET_CLIENT
                 scanMode = "none";
             }
 
-            lfDevice.startScan(scanMode, selectedServiceSocketId);
+            lfDevice.startScan(scanMode);
         }
 
         private void btnStopScan_Click(object sender, EventArgs e)

@@ -14,7 +14,7 @@ namespace LF_SOCKET_CLIENT
     {
         private static SocketIO socketClient;
 
-        private string ethDeviceSerial = null;
+        private string deviceSerialNumber = null;
 
         private static List<UsbDeviceModel> usbDevices = new List<UsbDeviceModel>();
         private static List<string> socketList = new List<string>();
@@ -188,6 +188,14 @@ namespace LF_SOCKET_CLIENT
                 var json = JObject.Parse(response.GetValue(0).ToString());
                 var status = (bool)json.GetValue("status");
                 var message = json.GetValue("message").ToString();
+                try
+                {
+                    deviceSerialNumber = json.GetValue("deviceSerialNumber").ToString();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
                 connectDeviceUsbDelegate(status, message);
             }, new
             {
@@ -205,7 +213,8 @@ namespace LF_SOCKET_CLIENT
                 var message = json.GetValue("message").ToString();
                 try
                 {
-                    ethDeviceSerial = json.GetValue("deviceSerialNumber").ToString();
+                    deviceSerialNumber = json.GetValue("deviceSerialNumber").ToString();
+                    Console.WriteLine("Device serial number: " + deviceSerialNumber);
                 } catch (Exception e) {
                     Console.WriteLine(e.Message);
                 }
@@ -213,11 +222,11 @@ namespace LF_SOCKET_CLIENT
             }, new
             {
                 socketId,
-                deviceId
+                deviceId = deviceId,
             });
         }
 
-        public void disconnectDeviceUsb(string socketId, string deviceId)
+        public void disconnectDeviceUsb(string socketId)
         {
             socketClient.EmitAsync("generic", response => {
                 var json = JObject.Parse(response.GetValue(0).ToString());
@@ -227,25 +236,26 @@ namespace LF_SOCKET_CLIENT
             {
                 eventName = "disconnectDevice",
                 socketId = socketId,
-                deviceId = deviceId
+                deviceId = deviceSerialNumber
             });
         }
 
-        public void disconnectDeviceEth(string socketId, string deviceId)
+        public void disconnectDeviceEth(string socketId)
         {
+            Console.WriteLine(deviceSerialNumber);
             socketClient.EmitAsync("generic", response => {
                 var json = JObject.Parse(response.GetValue(0).ToString());
                 var message = json.GetValue("message").ToString();
-                ethDeviceSerial = null;
+                deviceSerialNumber = null;
                 disconnectDeviceEthDelegate(true, message);
             }, new
             {
                 eventName = "disconnectDevice",
                 socketId = socketId,
-                deviceId = ethDeviceSerial
+                deviceId = deviceSerialNumber
             });
         }
-        public void startScan(string scanMode, string selectedServiceSocketId)
+        public void startScan(string scanMode)
         {
             LFDeviceModel model = new LFDeviceModel();
             socketClient.EmitAsync("generic", response =>
@@ -260,6 +270,7 @@ namespace LF_SOCKET_CLIENT
             {
                 eventName = "startScan",
                 scanMode = scanMode,
+                deviceId = deviceSerialNumber,
                 socketId = selectedServiceSocketId
             });
             
@@ -273,6 +284,7 @@ namespace LF_SOCKET_CLIENT
             }, new
             {
                 eventName = "stopScan",
+                deviceId = deviceSerialNumber,
                 socketId = selectedServiceSocketId
             });
         }
@@ -291,7 +303,8 @@ namespace LF_SOCKET_CLIENT
                 eventName = "ledOn",
                 socketId = selectedServiceSocketId,
                 mode = mode,
-                list = list
+                list = list,
+                deviceId = deviceSerialNumber
             });
         }
 
@@ -307,7 +320,8 @@ namespace LF_SOCKET_CLIENT
             }, new
             {
                 eventName = "ledOff",
-                socketId = selectedServiceSocketId
+                socketId = selectedServiceSocketId,
+                deviceId = deviceSerialNumber
             });
         }
 
@@ -349,7 +363,8 @@ namespace LF_SOCKET_CLIENT
             }, new
             {
                 eventName = "refreshTags",
-                socketId = socketId
+                socketId = socketId,
+                deviceId = deviceSerialNumber
             });
         }
     }
