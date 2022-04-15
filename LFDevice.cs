@@ -191,6 +191,8 @@ namespace LF_SOCKET_CLIENT
                 try
                 {
                     deviceSerialNumber = json.GetValue("deviceSerialNumber").ToString();
+                    mode = "usbMode";
+                    Console.WriteLine("Device serial number: " + deviceSerialNumber);
                 }
                 catch (Exception e)
                 {
@@ -214,6 +216,7 @@ namespace LF_SOCKET_CLIENT
                 try
                 {
                     deviceSerialNumber = json.GetValue("deviceSerialNumber").ToString();
+                    mode = "ethMode";
                     Console.WriteLine("Device serial number: " + deviceSerialNumber);
                 } catch (Exception e) {
                     Console.WriteLine(e.Message);
@@ -222,7 +225,7 @@ namespace LF_SOCKET_CLIENT
             }, new
             {
                 socketId,
-                deviceId = deviceId,
+                deviceId,
             });
         }
 

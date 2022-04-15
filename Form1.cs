@@ -290,7 +290,7 @@ namespace LF_SOCKET_CLIENT
             {
                 usbDeviceSelection.Invoke(new MethodInvoker(delegate
                 {
-                    usbDeviceSelection.Items.Add(device);
+                    usbDeviceSelection.Items.Add(device.deviceId);
                 }));
             }
         }
