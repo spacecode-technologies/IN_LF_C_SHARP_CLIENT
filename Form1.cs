@@ -366,21 +366,17 @@ namespace LF_SOCKET_CLIENT
 
         private void addTagsListener(string str)
         {
-            if (tagList.InvokeRequired)
+            if (!tagList.Items.Contains(str))
             {
                 tagList.Invoke(new MethodInvoker(delegate
                 {
                     tagList.Items.Add(str);
                 }));
+                tagCountText.Invoke(new MethodInvoker(delegate
+                {
+                    tagCountText.Text = tagList.Items.Count.ToString();
+                }));
             }
-            else
-            {
-                tagList.Items.Add(str);
-            }
-            tagCountText.Invoke(new MethodInvoker(delegate
-            {
-                tagCountText.Text = tagList.Items.Count.ToString();
-            }));
         }
 
         private void startScanListener(bool status, string msg)
@@ -622,7 +618,7 @@ namespace LF_SOCKET_CLIENT
             mode = "ethernet";
             if (socketList.Count > 0)
             {
-                lfDevice.connectEthDevice(selectedServiceSocketId, txtIpAddress.Text.Trim());
+                lfDevice.connectEthDevice(txtIpAddress.Text.Trim());
             } else
             {
                 txtInfo.Invoke(new MethodInvoker(delegate
@@ -634,7 +630,7 @@ namespace LF_SOCKET_CLIENT
 
         private void btnDisconnectEth_Click(object sender, EventArgs e)
         {
-            lfDevice.disconnectDeviceEth(selectedServiceSocketId);
+            lfDevice.disconnectDeviceEth();
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)

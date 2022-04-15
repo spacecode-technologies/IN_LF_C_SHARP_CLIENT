@@ -19,7 +19,7 @@ namespace LF_SOCKET_CLIENT
         private static List<UsbDeviceModel> usbDevices = new List<UsbDeviceModel>();
         private static List<string> socketList = new List<string>();
         private static string mode;
-        private static string selectedServiceSocketId;
+        private string selectedServiceSocketId = null;
 
         public delegate void connectionStatusDel(string msg);
         public delegate void onSocketErrorDel(string e);
@@ -148,33 +148,41 @@ namespace LF_SOCKET_CLIENT
                 // setting the first socket id as selected socket id
                 if (socketList.Count > 0)
                 {
-                    selectedServiceSocketId = socketList[0].ToString();
-                    Console.WriteLine(selectedServiceSocketId);
-                    socketClient.EmitAsync("generic", response1 =>
+                    foreach (var socketId in socketList)
                     {
-                        Console.WriteLine(response1.ToString());
-                        JObject jObject = JObject.Parse(response1.GetValue(0).ToString());
-                        if (((bool)jObject.GetValue("status")))
+                        if (selectedServiceSocketId == null)
                         {
-                            JArray devicesArr = JArray.Parse(jObject.GetValue("devices").ToString());
-                            Console.WriteLine("DeviceArr Length: " + devicesArr.Count);
-
-                            foreach (var device in devicesArr)
+                            Console.WriteLine(selectedServiceSocketId);
+                            socketClient.EmitAsync("generic", response1 =>
                             {
-                                var deviceObj = JObject.Parse(device.ToString());
-                                usbDevices.Add(new UsbDeviceModel { deviceId = deviceObj.GetValue("deviceId").ToString(), socketId = deviceObj.GetValue("socketId").ToString() });
-                            }
-                            updateUsbDeviceListDelegate(usbDevices, jObject.GetValue("message").ToString());
+                                selectedServiceSocketId = socketId;
+                                Console.WriteLine(response1.ToString());
+                                Console.WriteLine(socketId);
+                                Console.WriteLine(selectedServiceSocketId);
+                                JObject jObject = JObject.Parse(response1.GetValue(0).ToString());
+                                if (((bool)jObject.GetValue("status")))
+                                {
+                                    JArray devicesArr = JArray.Parse(jObject.GetValue("devices").ToString());
+                                    Console.WriteLine("DeviceArr Length: " + devicesArr.Count);
+
+                                    foreach (var device in devicesArr)
+                                    {
+                                        var deviceObj = JObject.Parse(device.ToString());
+                                        usbDevices.Add(new UsbDeviceModel { deviceId = deviceObj.GetValue("deviceId").ToString(), socketId = deviceObj.GetValue("socketId").ToString() });
+                                    }
+                                    updateUsbDeviceListDelegate(usbDevices, jObject.GetValue("message").ToString());
+                                }
+                                else
+                                {
+                                    updateUsbDeviceListDelegate(usbDevices, jObject.GetValue("message").ToString());
+                                }
+                            }, new
+                            {
+                                eventName = "getDevices",
+                                socketId = socketId
+                            });
                         }
-                        else
-                        {
-                            updateUsbDeviceListDelegate(usbDevices, jObject.GetValue("message").ToString());
-                        }
-                    }, new
-                    {
-                        eventName = "getDevices",
-                        socketId = selectedServiceSocketId
-                    });
+                    }
                 }
 
             }, connectionString);
@@ -206,8 +214,9 @@ namespace LF_SOCKET_CLIENT
             });
         }
         
-        public void connectEthDevice(string socketId, string deviceId)
+        public void connectEthDevice(string deviceId)
         {
+            Console.WriteLine(selectedServiceSocketId);
             socketClient.EmitAsync("send_connectDevice", response => {
                 Console.WriteLine(response.ToString());
                 var json = JObject.Parse(response.GetValue(0).ToString());
@@ -224,7 +233,7 @@ namespace LF_SOCKET_CLIENT
                 connectDeviceEthDelegate(status, message);
             }, new
             {
-                socketId,
+                socketId = selectedServiceSocketId,
                 deviceId,
             });
         }
@@ -243,7 +252,7 @@ namespace LF_SOCKET_CLIENT
             });
         }
 
-        public void disconnectDeviceEth(string socketId)
+        public void disconnectDeviceEth()
         {
             Console.WriteLine(deviceSerialNumber);
             socketClient.EmitAsync("generic", response => {
@@ -254,12 +263,13 @@ namespace LF_SOCKET_CLIENT
             }, new
             {
                 eventName = "disconnectDevice",
-                socketId = socketId,
+                socketId = selectedServiceSocketId,
                 deviceId = deviceSerialNumber
             });
         }
         public void startScan(string scanMode)
         {
+            Console.WriteLine(selectedServiceSocketId);
             LFDeviceModel model = new LFDeviceModel();
             socketClient.EmitAsync("generic", response =>
             {
