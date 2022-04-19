@@ -205,6 +205,7 @@ namespace LF_SOCKET_CLIENT
                 {
                     deviceSerialNumber = json.GetValue("deviceSerialNumber").ToString();
                     mode = "usbMode";
+                    selectedServiceSocketId = socketId;
                     Console.WriteLine("Device serial number: " + deviceSerialNumber);
                 }
                 catch (Exception e)
@@ -296,7 +297,7 @@ namespace LF_SOCKET_CLIENT
             
         }
 
-        public void stopScan(string socketId)
+        public void stopScan()
         {
             socketClient.EmitAsync("generic", response =>
             {
