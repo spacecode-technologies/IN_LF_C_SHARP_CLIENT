@@ -380,6 +380,14 @@ namespace LF_SOCKET_CLIENT
                 deviceId = deviceSerialNumber
             });
         }
+
+        internal void formClosing(string socketId)
+        {
+            ledOff();
+            disconnectDeviceEth();
+            if (socketId != null)
+                disconnectDeviceUsb(socketId);
+        }
     }
 
     class UsbDeviceModel

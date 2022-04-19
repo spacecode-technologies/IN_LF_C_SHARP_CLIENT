@@ -716,7 +716,13 @@ namespace LF_SOCKET_CLIENT
 
         private void Form1_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            
+            if (usbDeviceList.Count > 0)
+            {   
+                lfDevice.formClosing(usbDeviceList[usbDeviceSelection.SelectedIndex].socketId);
+            } else
+            {
+                lfDevice.formClosing(null);
+            }
         }
 
         private void updateInfoStatus(string msg)
