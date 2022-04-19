@@ -22,6 +22,9 @@ namespace LF_SOCKET_CLIENT
         private List<string> socketList = new List<string>();
         private static string mode;
         private static string selectedServiceSocketId;
+        private int currentTabIndex = 0;
+        private bool deviceConnected = false;
+        private bool inScan = false;
 
         private LFDevice lfDevice;
 
@@ -284,13 +287,27 @@ namespace LF_SOCKET_CLIENT
 
         private void deviceRefreshListener(bool status, List<UsbDeviceModel> list, string msg)
         {
-            updateInfoStatus(msg);
-            usbDeviceList = list;
-            foreach (var device in list)
+            btnRefresh.Invoke(new MethodInvoker(delegate
             {
+                btnRefresh.Enabled = true;
+            }));
+            updateInfoStatus("Refresh: "+msg);
+            if (status)
+            {
+                usbDeviceList = list;
+                foreach (var device in list)
+                {
+                    usbDeviceSelection.Invoke(new MethodInvoker(delegate
+                    {
+                        usbDeviceSelection.Items.Add(device.deviceId);
+                    }));
+                }
+            } else
+            {
+                usbDeviceList.Clear();
                 usbDeviceSelection.Invoke(new MethodInvoker(delegate
                 {
-                    usbDeviceSelection.Items.Add(device.deviceId);
+                    usbDeviceSelection.Items.Clear();
                 }));
             }
         }
@@ -341,6 +358,11 @@ namespace LF_SOCKET_CLIENT
 
         private void scanCompletedListener(bool status, string message, List<string> tags)
         {
+            inScan = false;
+            btnRefreshTags.Invoke(new MethodInvoker(delegate
+            {
+                btnRefreshTags.Enabled = false;
+            }));
             updateInfoStatus(message);
             btnStartScan.Invoke(new MethodInvoker(delegate
             {
@@ -370,12 +392,19 @@ namespace LF_SOCKET_CLIENT
 
         private void scanStartedListener(string str)
         {
+            inScan = true;
             updateInfoStatus(str);
             if (!checkContineousMode.Checked)
             {
                 tagList.Invoke(new MethodInvoker(delegate
                 {
                     tagList.Items.Clear();
+                }));
+            } else
+            {
+                btnRefreshTags.Invoke(new MethodInvoker(delegate
+                {
+                    btnRefreshTags.Enabled = true;
                 }));
             }
             btnStartScan.Invoke(new MethodInvoker(delegate
@@ -390,6 +419,11 @@ namespace LF_SOCKET_CLIENT
 
         private void stopScanDelegate(bool status, string msg)
         {
+            inScan = false;
+            btnRefreshTags.Invoke(new MethodInvoker(delegate
+            {
+                btnRefreshTags.Enabled = false;
+            }));
             txtInfo.Invoke(new MethodInvoker(delegate
                 {
                     txtInfo.Text = msg;
@@ -467,6 +501,11 @@ namespace LF_SOCKET_CLIENT
 
         private void disconnectDeviceUsbListener(bool status, string msg)
         {
+            deviceConnected = false;
+            tagList.Invoke(new MethodInvoker(delegate
+            {
+                tagList.Items.Clear();
+            }));
             updateInfoStatus(msg);
             txtIpAddress.Invoke(new MethodInvoker(delegate
             {
@@ -524,6 +563,11 @@ namespace LF_SOCKET_CLIENT
         
         private void disconnectDeviceEthListener(bool status, string msg)
         {
+            deviceConnected = false;
+            tagList.Invoke(new MethodInvoker(delegate
+            {
+                tagList.Items.Clear();
+            }));
             updateInfoStatus(msg);
             txtIpAddress.Invoke(new MethodInvoker(delegate
             {
@@ -585,6 +629,7 @@ namespace LF_SOCKET_CLIENT
             updateInfoStatus(msg);
             if (status)
             {
+                deviceConnected = true;
                 txtIpAddress.Invoke(new MethodInvoker(delegate
                 {
                     txtIpAddress.Enabled = false;
@@ -630,6 +675,7 @@ namespace LF_SOCKET_CLIENT
             updateInfoStatus(msg);
             if (status)
             {
+                deviceConnected = true;
                 txtIpAddress.Invoke(new MethodInvoker(delegate
                 {
                     txtIpAddress.Enabled = false;
@@ -669,8 +715,20 @@ namespace LF_SOCKET_CLIENT
             }
         }
 
-            private void updateUsbDeviceList(List<UsbDeviceModel> usbDevices, string msg)
+        private void updateUsbDeviceList(List<UsbDeviceModel> usbDevices, string msg)
         {
+            btnRefresh.Invoke(new MethodInvoker(delegate
+            {
+                btnRefresh.Enabled = true;
+            }));
+            btnConnect.Invoke(new MethodInvoker(delegate
+            {
+                btnConnect.Enabled = true;
+            }));
+            btnConnectEth.Invoke(new MethodInvoker(delegate
+            {
+                btnConnectEth.Enabled = true;
+            }));
             usbDeviceList = usbDevices;
             updateInfoStatus(msg);
             foreach (var usbDevice in usbDevices)
@@ -788,6 +846,11 @@ namespace LF_SOCKET_CLIENT
             usbDeviceList.Clear();
             usbDeviceSelection.Items.Clear();
             lfDevice.deviceRefresh();
+            btnRefresh.Invoke(new MethodInvoker(delegate
+            {
+                btnRefresh.Enabled = false;
+            }));
+            updateInfoStatus("Refreshing devices...");
         }
 
         private void btnConnectEth_Click(object sender, EventArgs e)
@@ -842,7 +905,7 @@ namespace LF_SOCKET_CLIENT
 
         private void checkContineousMode_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkContineousMode.Checked)
+            if (checkContineousMode.Checked && inScan)
             {
                 btnRefreshTags.Invoke(new MethodInvoker(delegate
                 {
@@ -908,6 +971,17 @@ namespace LF_SOCKET_CLIENT
             {
                 txtInfo.Text = msg;
             }));
+        }
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (deviceConnected)
+            {
+                tabControl1.SelectTab(currentTabIndex);
+            } else
+            {
+                currentTabIndex = tabControl1.SelectedIndex;
+            }
         }
     }
 }

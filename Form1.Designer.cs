@@ -68,6 +68,7 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(776, 122);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -97,6 +98,7 @@
             // 
             // btnRefresh
             // 
+            this.btnRefresh.Enabled = false;
             this.btnRefresh.Location = new System.Drawing.Point(380, 36);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(65, 23);
@@ -107,6 +109,7 @@
             // 
             // btnConnect
             // 
+            this.btnConnect.Enabled = false;
             this.btnConnect.Location = new System.Drawing.Point(228, 36);
             this.btnConnect.Name = "btnConnect";
             this.btnConnect.Size = new System.Drawing.Size(65, 23);
@@ -167,6 +170,7 @@
             // 
             // btnConnectEth
             // 
+            this.btnConnectEth.Enabled = false;
             this.btnConnectEth.Location = new System.Drawing.Point(242, 34);
             this.btnConnectEth.Name = "btnConnectEth";
             this.btnConnectEth.Size = new System.Drawing.Size(67, 23);
