@@ -303,11 +303,35 @@ namespace LF_SOCKET_CLIENT
         private void ledOffListener(bool status, string msg)
         {
             updateInfoStatus(msg);
+            btnLedOn.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOn.Enabled = true;
+            }));
+            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+            {
+                btnLedAllAtOnce.Enabled = true;
+            }));
+            btnLedOff.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOff.Enabled = false;
+            }));
         }
 
         private void ledOnListener(bool status, string msg)
         {
             updateInfoStatus(msg);
+            btnLedOn.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOn.Enabled = false;
+            }));
+            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+            {
+                btnLedAllAtOnce.Enabled = false;
+            }));
+            btnLedOff.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOff.Enabled = true;
+            }));
         }
 
         private void scanErrorListener(string str)
@@ -325,6 +349,22 @@ namespace LF_SOCKET_CLIENT
             btnStopScan.Invoke(new MethodInvoker(delegate
             {
                 btnStopScan.Enabled = false;
+            }));
+            btnLedOn.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOn.Enabled = true;
+            }));
+            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+            {
+                btnLedAllAtOnce.Enabled = true;
+            }));
+            btnDisconnectEth.Invoke(new MethodInvoker(delegate
+            {
+                btnDisconnectEth.Enabled = true;
+            }));
+            btnDisconnect.Invoke(new MethodInvoker(delegate
+            {
+                btnDisconnect.Enabled = true;
             }));
         }
 
@@ -362,6 +402,23 @@ namespace LF_SOCKET_CLIENT
             {
                 btnStopScan.Enabled = false;
             }));
+            btnLedOn.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOn.Enabled = true;
+            }));
+            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+            {
+                btnLedAllAtOnce.Enabled = true;
+            }));
+            btnDisconnectEth.Invoke(new MethodInvoker(delegate
+            {
+                btnDisconnectEth.Enabled = true;
+            }));
+            btnDisconnect.Invoke(new MethodInvoker(delegate
+            {
+                btnDisconnect.Enabled = true;
+            }));
+
         }
 
         private void addTagsListener(string str)
@@ -382,17 +439,46 @@ namespace LF_SOCKET_CLIENT
         private void startScanListener(bool status, string msg)
         {
             updateInfoStatus(msg);
+            btnStartScan.Invoke(new MethodInvoker(delegate
+            {
+                btnStartScan.Enabled = false;
+            }));
+            btnLedOn.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOn.Enabled = false;
+            }));
+            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+            {
+                btnLedAllAtOnce.Enabled = false;
+            }));
+            btnLedOff.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOff.Enabled = false;
+            }));
+            btnDisconnectEth.Invoke(new MethodInvoker(delegate
+            {
+                btnDisconnectEth.Enabled = false;
+            }));
+            btnDisconnect.Invoke(new MethodInvoker(delegate
+            {
+                btnDisconnect.Enabled = false;
+            }));
         }
 
         private void disconnectDeviceUsbListener(bool status, string msg)
         {
-            txtInfo.Invoke(new MethodInvoker(delegate
+            updateInfoStatus(msg);
+            txtIpAddress.Invoke(new MethodInvoker(delegate
             {
-                txtInfo.Text = msg;
+                txtIpAddress.Enabled = true;
             }));
-            btnConnect.Invoke(new MethodInvoker(delegate
+            usbDeviceSelection.Invoke(new MethodInvoker(delegate
             {
-                btnConnect.Enabled = true;
+                usbDeviceSelection.Enabled = true;
+            }));
+            btnDisconnectEth.Invoke(new MethodInvoker(delegate
+            {
+                btnDisconnectEth.Enabled = false;
             }));
             btnConnectEth.Invoke(new MethodInvoker(delegate
             {
@@ -402,26 +488,54 @@ namespace LF_SOCKET_CLIENT
             {
                 btnDisconnect.Enabled = false;
             }));
-            btnDisconnectEth.Invoke(new MethodInvoker(delegate
-            {
-                btnDisconnectEth.Enabled = false;
-            }));
-            btnDisconnect.Enabled = false;
             btnConnect.Invoke(new MethodInvoker(delegate
             {
                 btnConnect.Enabled = true;
+            }));
+            btnRefresh.Invoke(new MethodInvoker(delegate
+            {
+                btnRefresh.Enabled = true;
+            }));
+            btnStartScan.Invoke(new MethodInvoker(delegate
+            {
+                btnStartScan.Enabled = false;
+            }));
+            checkContineousMode.Invoke(new MethodInvoker(delegate
+            {
+                checkContineousMode.Enabled = false;
+            }));
+            btnRefreshTags.Invoke(new MethodInvoker(delegate
+            {
+                btnRefreshTags.Enabled = false;
+            }));
+            btnLedOn.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOn.Enabled = false;
+            }));
+            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+            {
+                btnLedAllAtOnce.Enabled = false;
+            }));
+            btnLedOff.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOff.Enabled = false;
             }));
         }
         
         private void disconnectDeviceEthListener(bool status, string msg)
         {
-            txtInfo.Invoke(new MethodInvoker(delegate
+            updateInfoStatus(msg);
+            txtIpAddress.Invoke(new MethodInvoker(delegate
             {
-                txtInfo.Text = msg;
+                txtIpAddress.Enabled = true;
             }));
-            btnConnect.Invoke(new MethodInvoker(delegate
+            usbDeviceSelection.Invoke(new MethodInvoker(delegate
             {
-                btnConnect.Enabled = true;
+                usbDeviceSelection.Enabled = true;
+            }));
+            btnDisconnectEth.Invoke(new MethodInvoker(delegate
+            {
+                btnDisconnectEth.Enabled = false;
             }));
             btnConnectEth.Invoke(new MethodInvoker(delegate
             {
@@ -431,14 +545,37 @@ namespace LF_SOCKET_CLIENT
             {
                 btnDisconnect.Enabled = false;
             }));
-            btnDisconnectEth.Invoke(new MethodInvoker(delegate
-            {
-                btnDisconnectEth.Enabled = false;
-            }));
-            btnDisconnect.Enabled = false;
             btnConnect.Invoke(new MethodInvoker(delegate
             {
                 btnConnect.Enabled = true;
+            }));
+            btnRefresh.Invoke(new MethodInvoker(delegate
+            {
+                btnRefresh.Enabled = true;
+            }));
+            btnStartScan.Invoke(new MethodInvoker(delegate
+            {
+                btnStartScan.Enabled = false;
+            }));
+            checkContineousMode.Invoke(new MethodInvoker(delegate
+            {
+                checkContineousMode.Enabled = false;
+            }));
+            btnRefreshTags.Invoke(new MethodInvoker(delegate
+            {
+                btnRefreshTags.Enabled = false;
+            }));
+            btnLedOn.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOn.Enabled = false;
+            }));
+            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+            {
+                btnLedAllAtOnce.Enabled = false;
+            }));
+            btnLedOff.Invoke(new MethodInvoker(delegate
+            {
+                btnLedOff.Enabled = false;
             }));
         }
 
@@ -448,9 +585,17 @@ namespace LF_SOCKET_CLIENT
             updateInfoStatus(msg);
             if (status)
             {
+                txtIpAddress.Invoke(new MethodInvoker(delegate
+                {
+                    txtIpAddress.Enabled = false;
+                }));
+                usbDeviceSelection.Invoke(new MethodInvoker(delegate
+                {
+                    usbDeviceSelection.Enabled = false;
+                }));
                 btnDisconnectEth.Invoke(new MethodInvoker(delegate
                 {
-                    btnDisconnectEth.Enabled = true;
+                    btnDisconnectEth.Enabled = false;
                 }));
                 btnConnectEth.Invoke(new MethodInvoker(delegate
                 {
@@ -463,6 +608,18 @@ namespace LF_SOCKET_CLIENT
                 btnConnect.Invoke(new MethodInvoker(delegate
                 {
                     btnConnect.Enabled = false;
+                }));
+                btnRefresh.Invoke(new MethodInvoker(delegate
+                {
+                    btnRefresh.Enabled = false;
+                }));
+                btnStartScan.Invoke(new MethodInvoker(delegate
+                {
+                    btnStartScan.Enabled = true;
+                }));
+                checkContineousMode.Invoke(new MethodInvoker(delegate
+                {
+                    checkContineousMode.Enabled = true;
                 }));
             }
         }
@@ -473,6 +630,14 @@ namespace LF_SOCKET_CLIENT
             updateInfoStatus(msg);
             if (status)
             {
+                txtIpAddress.Invoke(new MethodInvoker(delegate
+                {
+                    txtIpAddress.Enabled = false;
+                }));
+                usbDeviceSelection.Invoke(new MethodInvoker(delegate
+                {
+                    usbDeviceSelection.Enabled = false;
+                }));
                 btnDisconnectEth.Invoke(new MethodInvoker(delegate
                 {
                     btnDisconnectEth.Enabled = true;
@@ -483,11 +648,23 @@ namespace LF_SOCKET_CLIENT
                 }));
                 btnDisconnect.Invoke(new MethodInvoker(delegate
                 {
-                    btnDisconnect.Enabled = true;
+                    btnDisconnect.Enabled = false;
                 }));
                 btnConnect.Invoke(new MethodInvoker(delegate
                 {
                     btnConnect.Enabled = false;
+                }));
+                btnRefresh.Invoke(new MethodInvoker(delegate
+                {
+                    btnRefresh.Enabled = false;
+                }));
+                btnStartScan.Invoke(new MethodInvoker(delegate
+                {
+                    btnStartScan.Enabled = true;
+                }));
+                checkContineousMode.Invoke(new MethodInvoker(delegate
+                {
+                    checkContineousMode.Enabled = true;
                 }));
             }
         }

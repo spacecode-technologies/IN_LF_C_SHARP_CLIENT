@@ -78,7 +78,7 @@
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(768, 96);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "USB Device";
@@ -140,7 +140,7 @@
             this.tabPage2.Controls.Add(this.txtIpAddress);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(768, 96);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Ethernet";
@@ -204,6 +204,7 @@
             // 
             // btnLedOff
             // 
+            this.btnLedOff.Enabled = false;
             this.btnLedOff.Location = new System.Drawing.Point(663, 261);
             this.btnLedOff.Name = "btnLedOff";
             this.btnLedOff.Size = new System.Drawing.Size(75, 23);
@@ -214,6 +215,7 @@
             // 
             // btnLedAllAtOnce
             // 
+            this.btnLedAllAtOnce.Enabled = false;
             this.btnLedAllAtOnce.Location = new System.Drawing.Point(90, 261);
             this.btnLedAllAtOnce.Name = "btnLedAllAtOnce";
             this.btnLedAllAtOnce.Size = new System.Drawing.Size(75, 23);
@@ -224,6 +226,7 @@
             // 
             // btnLedOn
             // 
+            this.btnLedOn.Enabled = false;
             this.btnLedOn.Location = new System.Drawing.Point(9, 261);
             this.btnLedOn.Name = "btnLedOn";
             this.btnLedOn.Size = new System.Drawing.Size(75, 23);
@@ -247,7 +250,7 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(660, 27);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(39, 13);
+            this.label3.Size = new System.Drawing.Size(47, 16);
             this.label3.TabIndex = 5;
             this.label3.Text = "Tags:";
             // 
@@ -266,6 +269,7 @@
             // 
             this.checkContineousMode.AutoSize = true;
             this.checkContineousMode.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkContineousMode.Enabled = false;
             this.checkContineousMode.Location = new System.Drawing.Point(226, 23);
             this.checkContineousMode.Name = "checkContineousMode";
             this.checkContineousMode.Size = new System.Drawing.Size(109, 17);
@@ -287,6 +291,7 @@
             // 
             // btnStartScan
             // 
+            this.btnStartScan.Enabled = false;
             this.btnStartScan.Location = new System.Drawing.Point(9, 20);
             this.btnStartScan.Name = "btnStartScan";
             this.btnStartScan.Size = new System.Drawing.Size(75, 23);
@@ -328,7 +333,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(799, 481);
+            this.ClientSize = new System.Drawing.Size(797, 476);
             this.Controls.Add(this.txtInfo);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox1);

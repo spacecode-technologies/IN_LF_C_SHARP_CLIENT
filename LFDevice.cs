@@ -146,10 +146,12 @@ namespace LF_SOCKET_CLIENT
                 if (onSocketConnectedDelegate != null)
                     onSocketConnectedDelegate(true, socketList, "Socket connected");
                 // setting the first socket id as selected socket id
+                Task.Delay(500);
                 if (socketList.Count > 0)
                 {
                     foreach (var socketId in socketList)
                     {
+                        Task.Delay(1000);
                         if (selectedServiceSocketId == null)
                         {
                             Console.WriteLine(selectedServiceSocketId);
@@ -183,6 +185,9 @@ namespace LF_SOCKET_CLIENT
                             });
                         }
                     }
+                } else
+                {
+                    updateUsbDeviceListDelegate(usbDevices, "No services connected");
                 }
 
             }, connectionString);
@@ -240,6 +245,7 @@ namespace LF_SOCKET_CLIENT
 
         public void disconnectDeviceUsb(string socketId)
         {
+            ledOff();
             socketClient.EmitAsync("generic", response => {
                 var json = JObject.Parse(response.GetValue(0).ToString());
                 var message = json.GetValue("message").ToString();
@@ -254,6 +260,7 @@ namespace LF_SOCKET_CLIENT
 
         public void disconnectDeviceEth()
         {
+            ledOff();
             Console.WriteLine(deviceSerialNumber);
             socketClient.EmitAsync("generic", response => {
                 var json = JObject.Parse(response.GetValue(0).ToString());
@@ -383,7 +390,6 @@ namespace LF_SOCKET_CLIENT
 
         internal void formClosing(string socketId)
         {
-            ledOff();
             disconnectDeviceEth();
             if (socketId != null)
                 disconnectDeviceUsb(socketId);
