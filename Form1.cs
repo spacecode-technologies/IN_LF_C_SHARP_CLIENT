@@ -270,8 +270,9 @@ namespace LF_SOCKET_CLIENT
 
         }
 
-        private void refreshTagListener(bool status)
+        private void refreshTagListener(bool status, string msg)
         {
+            updateInfoStatus(msg);
             if (status)
             {
                 tagList.Invoke(new MethodInvoker(delegate
@@ -922,7 +923,7 @@ namespace LF_SOCKET_CLIENT
 
         private void btnRefreshTags_Click(object sender, EventArgs e)
         {
-            lfDevice.refreshTag(selectedServiceSocketId);
+            lfDevice.refreshTag();
         }
 
         private void btnLedOn_Click(object sender, EventArgs e)

@@ -39,7 +39,7 @@ namespace LF_SOCKET_CLIENT
         public delegate void ledOnDel(bool status, string msg);
         public delegate void ledOffDel(bool status, string msg);
         public delegate void deviceRefreshDel(bool status, List<UsbDeviceModel> list, string msg);
-        public delegate void refreshTagDel(bool status);
+        public delegate void refreshTagDel(bool status, string msg);
 
         public connectionStatusDel connectionStatusDelegate;
         public onSocketErrorDel onSocketErrorDelegate;
@@ -375,15 +375,19 @@ namespace LF_SOCKET_CLIENT
             });
         }
 
-        public void refreshTag(string socketId)
+        public void refreshTag()
         {
+            Console.WriteLine("Refresh tag triggered");
             socketClient.EmitAsync("generic", response =>
             {
-                refreshTagDelegate(true);
+                Console.WriteLine(response.ToString());
+                JObject jObject = JObject.Parse(response.GetValue(0).ToString());
+                var message = jObject.GetValue("msg").ToString();
+                refreshTagDelegate(true, message);
             }, new
             {
                 eventName = "refreshTags",
-                socketId = socketId,
+                socketId = selectedServiceSocketId,
                 deviceId = deviceSerialNumber
             });
         }
