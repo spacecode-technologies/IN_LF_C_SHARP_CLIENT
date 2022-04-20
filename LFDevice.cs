@@ -24,7 +24,7 @@ namespace LF_SOCKET_CLIENT
         public delegate void connectionStatusDel(string msg);
         public delegate void onSocketErrorDel(string e);
         public delegate void onSocketConnectedDel(bool status, List<string> socketList, string msg);
-        public delegate void updateUsbDeviceListDel(List<UsbDeviceModel> usbDevices, string msg);
+        public delegate void updateUsbDeviceListDel(bool status, List<UsbDeviceModel> usbDevices, string msg);
         public delegate void connectDeviceUsbDel(bool status, string msg);
         public delegate void connectDeviceEthDel(bool status, string msg);
         public delegate void disconnectDeviceUsbDel(bool status, string msg);
@@ -71,7 +71,7 @@ namespace LF_SOCKET_CLIENT
                 },
                 EIO = 4,
             });
-            await socketClient.ConnectAsync();
+            socketClient.ConnectAsync().Wait();
             socketClient.OnConnected += onSocketConnected;
             socketClient.OnError += onSocketError;
 
@@ -167,7 +167,8 @@ namespace LF_SOCKET_CLIENT
                                 Console.WriteLine(socketId);
                                 Console.WriteLine(selectedServiceSocketId);
                                 JObject jObject = JObject.Parse(response1.GetValue(0).ToString());
-                                if (((bool)jObject.GetValue("status")))
+                                bool status = ((bool)jObject.GetValue("status"));
+                                if (status)
                                 {
                                     JArray devicesArr = JArray.Parse(jObject.GetValue("devices").ToString());
                                     Console.WriteLine("DeviceArr Length: " + devicesArr.Count);
@@ -177,11 +178,11 @@ namespace LF_SOCKET_CLIENT
                                         var deviceObj = JObject.Parse(device.ToString());
                                         usbDevices.Add(new UsbDeviceModel { deviceId = deviceObj.GetValue("deviceId").ToString(), socketId = deviceObj.GetValue("socketId").ToString() });
                                     }
-                                    updateUsbDeviceListDelegate(usbDevices, jObject.GetValue("message").ToString());
+                                    updateUsbDeviceListDelegate(status, usbDevices, jObject.GetValue("message").ToString());
                                 }
                                 else
                                 {
-                                    updateUsbDeviceListDelegate(usbDevices, jObject.GetValue("message").ToString());
+                                    updateUsbDeviceListDelegate(status, usbDevices, jObject.GetValue("message").ToString());
                                 }
                             }, new
                             {
@@ -192,7 +193,7 @@ namespace LF_SOCKET_CLIENT
                     }
                 } else
                 {
-                    updateUsbDeviceListDelegate(usbDevices, "No services connected");
+                    updateUsbDeviceListDelegate(false, usbDevices, "No services connected");
                 }
 
             }, connectionString);

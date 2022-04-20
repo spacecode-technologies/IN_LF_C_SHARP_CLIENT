@@ -125,6 +125,8 @@
             this.usbDeviceSelection.Name = "usbDeviceSelection";
             this.usbDeviceSelection.Size = new System.Drawing.Size(121, 21);
             this.usbDeviceSelection.TabIndex = 1;
+            this.usbDeviceSelection.SelectedIndexChanged += new System.EventHandler(this.usbDeviceSelection_SelectionIndexChanged);
+            this.usbDeviceSelection.TextUpdate += new System.EventHandler(this.usbDeviceSelection_OnTextUpdate);
             // 
             // label1
             // 
@@ -187,6 +189,7 @@
             this.txtIpAddress.Size = new System.Drawing.Size(132, 20);
             this.txtIpAddress.TabIndex = 0;
             this.txtIpAddress.Text = "219.91.168.168:8080";
+            this.txtIpAddress.TextChanged += new System.EventHandler(this.txtIpAddress_TextChanged);
             // 
             // groupBox1
             // 

@@ -11,6 +11,7 @@ namespace LF_SOCKET_CLIENT
         private int currentTabIndex = 0;
         private bool deviceConnected = false;
         private bool inScan = false;
+        private bool socketConnected = false;
 
         private LFDevice lfDevice;
 
@@ -79,6 +80,7 @@ namespace LF_SOCKET_CLIENT
                     {
                         usbDeviceSelection.Items.Add(device.deviceId);
                     }));
+                    enableBtnConnectUsb();
                 }
             } else
             {
@@ -287,6 +289,10 @@ namespace LF_SOCKET_CLIENT
                 {
                     tagList.Items.Clear();
                 }));
+                tagCountText.Invoke(new MethodInvoker(delegate
+                {
+                    tagCountText.Text = "0";
+                }));
                 txtIpAddress.Invoke(new MethodInvoker(delegate
                 {
                     txtIpAddress.Enabled = true;
@@ -307,10 +313,7 @@ namespace LF_SOCKET_CLIENT
                 {
                     btnDisconnect.Enabled = false;
                 }));
-                btnConnect.Invoke(new MethodInvoker(delegate
-                {
-                    btnConnect.Enabled = true;
-                }));
+                enableBtnConnectUsb();
                 btnRefresh.Invoke(new MethodInvoker(delegate
                 {
                     btnRefresh.Enabled = true;
@@ -358,6 +361,10 @@ namespace LF_SOCKET_CLIENT
                 {
                     tagList.Items.Clear();
                 }));
+                tagCountText.Invoke(new MethodInvoker(delegate
+                {
+                    tagCountText.Text = "0";
+                }));
                 txtIpAddress.Invoke(new MethodInvoker(delegate
                 {
                     txtIpAddress.Enabled = true;
@@ -378,10 +385,7 @@ namespace LF_SOCKET_CLIENT
                 {
                     btnDisconnect.Enabled = false;
                 }));
-                btnConnect.Invoke(new MethodInvoker(delegate
-                {
-                    btnConnect.Enabled = true;
-                }));
+                enableBtnConnectUsb();
                 btnRefresh.Invoke(new MethodInvoker(delegate
                 {
                     btnRefresh.Enabled = true;
@@ -463,10 +467,7 @@ namespace LF_SOCKET_CLIENT
                 }));
             } else
             {
-                btnConnect.Invoke(new MethodInvoker(delegate
-                {
-                    btnConnect.Enabled = true;
-                }));
+                enableBtnConnectUsb();
             }
         }
 
@@ -521,28 +522,55 @@ namespace LF_SOCKET_CLIENT
             }
         }
 
-        private void updateUsbDeviceList(List<UsbDeviceModel> usbDevices, string msg)
+        private void updateUsbDeviceList(bool status, List<UsbDeviceModel> usbDevices, string msg)
         {
+            socketConnected = true;
+            updateInfoStatus(msg);
             btnRefresh.Invoke(new MethodInvoker(delegate
             {
                 btnRefresh.Enabled = true;
-            }));
-            btnConnect.Invoke(new MethodInvoker(delegate
-            {
-                btnConnect.Enabled = true;
             }));
             btnConnectEth.Invoke(new MethodInvoker(delegate
             {
                 btnConnectEth.Enabled = true;
             }));
             usbDeviceList = usbDevices;
-            updateInfoStatus(msg);
             foreach (var usbDevice in usbDevices)
             {
                 usbDeviceSelection.Invoke(new MethodInvoker(delegate
                 {
                     usbDeviceSelection.Items.Add(usbDevice.deviceId);
                 }));
+                enableBtnConnectUsb();
+            }
+        }
+
+        private void enableBtnConnectUsb()
+        {
+            if (usbDeviceList.Count > 0 && usbDeviceSelection.Text.ToString().Trim() != "")
+            {
+                bool found = false;
+                foreach (var device in usbDeviceList)
+                {
+                    if (!found)
+                    {
+                        if (device.deviceId == usbDeviceSelection.Text.ToString().Trim())
+                        {
+                            btnConnect.Invoke(new MethodInvoker(delegate
+                            {
+                                btnConnect.Enabled = true;
+                            }));
+                            found = true;
+                        }
+                        else
+                        {
+                            btnConnect.Invoke(new MethodInvoker(delegate
+                            {
+                                btnConnect.Enabled = false;
+                            }));
+                        }
+                    }
+                }
             }
         }
 
@@ -573,9 +601,17 @@ namespace LF_SOCKET_CLIENT
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
+            usbDeviceSelection.Invoke(new MethodInvoker(delegate
+            {
+                usbDeviceSelection.Text = "";
+            }));
             usbDeviceList.Clear();
             usbDeviceSelection.Items.Clear();
             lfDevice.deviceRefresh();
+            btnConnect.Invoke(new MethodInvoker(delegate
+            {
+                btnConnect.Enabled = false;
+            }));
             btnRefresh.Invoke(new MethodInvoker(delegate
             {
                 btnRefresh.Enabled = false;
@@ -734,6 +770,55 @@ namespace LF_SOCKET_CLIENT
             } else
             {
                 currentTabIndex = tabControl1.SelectedIndex;
+            }
+        }
+
+        private void usbDeviceSelection_OnTextUpdate(object sender, EventArgs e)
+        {
+            if (usbDeviceSelection.Text.ToString().Trim() == "")
+            {
+                btnConnect.Invoke(new MethodInvoker(delegate
+                {
+                    btnConnect.Enabled = false;
+                }));
+            } else
+            {
+                enableBtnConnectUsb();
+            }
+        }
+
+        private void txtIpAddress_TextChanged(object sender, EventArgs e)
+        {
+            if (txtIpAddress.Text.ToString().Trim() == "")
+            {
+                btnConnectEth.Invoke(new MethodInvoker(delegate
+                {
+                    btnConnectEth.Enabled = false;
+                }));
+            } else
+            {
+                if (socketConnected)
+                {
+                    btnConnectEth.Invoke(new MethodInvoker(delegate
+                    {
+                        btnConnectEth.Enabled = true;
+                    }));
+                }
+            }
+         }
+
+        private void usbDeviceSelection_SelectionIndexChanged(object sender, EventArgs e)
+        {
+            if (usbDeviceSelection.Text.ToString().Trim() == "")
+            {
+                btnConnect.Invoke(new MethodInvoker(delegate
+                {
+                    btnConnect.Enabled = false;
+                }));
+            }
+            else
+            {
+                enableBtnConnectUsb();
             }
         }
     }
