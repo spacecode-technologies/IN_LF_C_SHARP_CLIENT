@@ -71,7 +71,7 @@ namespace LF_SOCKET_CLIENT
                 },
                 EIO = 4,
             });
-            socketClient.ConnectAsync().Wait();
+            await socketClient.ConnectAsync();
             socketClient.OnConnected += onSocketConnected;
             socketClient.OnError += onSocketError;
 
@@ -92,18 +92,22 @@ namespace LF_SOCKET_CLIENT
         {
             socketClient.On("receive_scanStarted", response =>
             {
+                Console.WriteLine("receive_scanStarted: "+response.ToString());
                 scanStartedDelegate(response.GetValue(0).ToString());
             });
             socketClient.On("receive_stopScan", (response) =>
             {
+                Console.WriteLine("receive_stopScan: " + response.ToString());
                 stopScanDelegate(true, "Scan Stopped");
             });
             socketClient.On("receive_addTag", response =>
             {
+                Console.WriteLine("receive_addTag: " + response.ToString());
                 addTagsDelegate(response.GetValue(0).ToString());
             });
             socketClient.On("receive_scanCompleted", response =>
             {
+                Console.WriteLine("receive_scanCompleted: " + response.ToString());
                 JObject json = JObject.Parse(response.GetValue(0).ToString());
                 var status = (bool)json.GetValue("status");
                 var message = json.GetValue("message").ToString();
@@ -117,6 +121,7 @@ namespace LF_SOCKET_CLIENT
             });
             socketClient.On("receive_scanError", response =>
             {
+                Console.WriteLine("receive_scanError: " + response.ToString());
                 scanErrorDelegate(response.GetValue(0).ToString());
             });
 

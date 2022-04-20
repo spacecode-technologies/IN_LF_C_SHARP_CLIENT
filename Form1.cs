@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LF_SOCKET_CLIENT
@@ -16,12 +17,15 @@ namespace LF_SOCKET_CLIENT
         public Form1()
         {
             InitializeComponent();
+            initializeLFDevice();
+        }
+
+        private void initializeLFDevice()
+        {
             lfDevice = new LFDevice();
             lfDevice.init();
 
             this.FormClosing += Form1_Closing;
-
-            btnDisconnectEth.Enabled = false;
 
             lfDevice.connectionStatusDelegate += connectionStatusListener;
             lfDevice.onSocketConnectedDelegate += onLFSocketConnected;
@@ -41,7 +45,6 @@ namespace LF_SOCKET_CLIENT
             lfDevice.ledOffDelegate += ledOffListener;
             lfDevice.deviceRefreshDelegate += deviceRefreshListener;
             lfDevice.refreshTagDelegate += refreshTagListener;
-
         }
 
         private void refreshTagListener(bool status, string msg)

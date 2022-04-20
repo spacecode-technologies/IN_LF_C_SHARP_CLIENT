@@ -160,6 +160,7 @@
             // 
             // btnDisconnectEth
             // 
+            this.btnDisconnectEth.Enabled = false;
             this.btnDisconnectEth.Location = new System.Drawing.Point(318, 34);
             this.btnDisconnectEth.Name = "btnDisconnectEth";
             this.btnDisconnectEth.Size = new System.Drawing.Size(78, 23);
