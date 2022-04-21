@@ -698,21 +698,27 @@ namespace LF_SOCKET_CLIENT
 
         private void btnLedOn_Click(object sender, EventArgs e)
         {
-            updateInfoStatus("Turning LED ON...");
-            btnLedOn.Invoke(new MethodInvoker(delegate
+            if (tagList.SelectedItems.Count > 0)
             {
-                btnLedOn.Enabled = false;
-            }));
-            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+                updateInfoStatus("Turning LED ON...");
+                btnLedOn.Invoke(new MethodInvoker(delegate
+                {
+                    btnLedOn.Enabled = false;
+                }));
+                btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+                {
+                    btnLedAllAtOnce.Enabled = false;
+                }));
+                var list = new List<string>();
+                foreach (var tag in tagList.SelectedItems)
+                {
+                    list.Add(tag.ToString().Split(',')[1].Split('-')[1]);
+                }
+                lfDevice.ledOn(list);
+            } else
             {
-                btnLedAllAtOnce.Enabled = false;
-            }));
-            var list = new List<string>();
-            foreach (var tag in tagList.SelectedItems)
-            {
-                list.Add(tag.ToString().Split(',')[1].Split('-')[1]);
+                MessageBox.Show("Please select some tags.");
             }
-            lfDevice.ledOn(list);
         }
 
         private void btnLedAllAtOnce_Click(object sender, EventArgs e)
