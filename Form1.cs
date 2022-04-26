@@ -66,9 +66,9 @@ namespace LF_SOCKET_CLIENT
 
         private void deviceRefreshListener(bool status, List<UsbDeviceModel> list, string msg)
         {
-            btnRefresh.Invoke(new MethodInvoker(delegate
+            btnRefreshTags.Invoke(new MethodInvoker(delegate
             {
-                btnRefresh.Enabled = true;
+                btnRefreshTags.Enabled = true;
             }));
             updateInfoStatus("Refresh: "+msg);
             if (status)
@@ -152,14 +152,17 @@ namespace LF_SOCKET_CLIENT
             {
                 btnStopScan.Enabled = false;
             }));
-            btnLedOn.Invoke(new MethodInvoker(delegate
+            if (tagList.Items.Count > 0)
             {
-                btnLedOn.Enabled = true;
-            }));
-            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
-            {
-                btnLedAllAtOnce.Enabled = true;
-            }));
+                btnLedOn.Invoke(new MethodInvoker(delegate
+                {
+                    btnLedOn.Enabled = true;
+                }));
+                btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+                {
+                    btnLedAllAtOnce.Enabled = true;
+                }));
+            }
             btnDisconnectEth.Invoke(new MethodInvoker(delegate
             {
                 btnDisconnectEth.Enabled = true;
@@ -216,14 +219,17 @@ namespace LF_SOCKET_CLIENT
             {
                 btnStopScan.Enabled = false;
             }));
-            btnLedOn.Invoke(new MethodInvoker(delegate
+            if (tagList.Items.Count > 0)
             {
-                btnLedOn.Enabled = true;
-            }));
-            btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
-            {
-                btnLedAllAtOnce.Enabled = true;
-            }));
+                btnLedOn.Invoke(new MethodInvoker(delegate
+                {
+                    btnLedOn.Enabled = true;
+                }));
+                btnLedAllAtOnce.Invoke(new MethodInvoker(delegate
+                {
+                    btnLedAllAtOnce.Enabled = true;
+                }));
+            }
             btnDisconnectEth.Invoke(new MethodInvoker(delegate
             {
                 btnDisconnectEth.Enabled = true;
@@ -554,7 +560,7 @@ namespace LF_SOCKET_CLIENT
                 {
                     if (!found)
                     {
-                        if (device.deviceId == usbDeviceSelection.Text.ToString().Trim())
+                        if (device.deviceId == usbDeviceSelection.Text.ToString().Trim() && usbDeviceSelection.SelectedItem != null)
                         {
                             btnConnect.Invoke(new MethodInvoker(delegate
                             {
@@ -694,6 +700,10 @@ namespace LF_SOCKET_CLIENT
         private void btnRefreshTags_Click(object sender, EventArgs e)
         {
             lfDevice.refreshTag();
+            btnRefreshTags.Invoke(new MethodInvoker(delegate
+            {
+                btnRefreshTags.Enabled = false;
+            }));
         }
 
         private void btnLedOn_Click(object sender, EventArgs e)
@@ -753,7 +763,10 @@ namespace LF_SOCKET_CLIENT
         {
             if (usbDeviceList.Count > 0)
             {   
-                lfDevice.formClosing(usbDeviceList[usbDeviceSelection.SelectedIndex].socketId);
+                if (usbDeviceSelection.SelectedItem != null)
+                {
+                    lfDevice.formClosing(usbDeviceList[usbDeviceSelection.SelectedIndex].socketId);
+                }
             } else
             {
                 lfDevice.formClosing(null);

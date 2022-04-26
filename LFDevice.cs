@@ -71,7 +71,7 @@ namespace LF_SOCKET_CLIENT
                 },
                 EIO = 4,
             });
-            socketClient.ConnectAsync().Wait();
+            await socketClient.ConnectAsync();
             socketClient.OnConnected += onSocketConnected;
             socketClient.OnError += onSocketError;
 
