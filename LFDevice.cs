@@ -95,11 +95,6 @@ namespace LF_SOCKET_CLIENT
                 Console.WriteLine("receive_scanStarted: "+response.ToString());
                 scanStartedDelegate(response.GetValue(0).ToString());
             });
-            socketClient.On("receive_stopScan", (response) =>
-            {
-                Console.WriteLine("receive_stopScan: " + response.ToString());
-                stopScanDelegate(true, "Scan Stopped");
-            });
             socketClient.On("receive_addTag", response =>
             {
                 Console.WriteLine("receive_addTag: " + response.ToString());
@@ -308,6 +303,7 @@ namespace LF_SOCKET_CLIENT
             socketClient.EmitAsync("generic", response =>
             {
                 Console.WriteLine(response);
+                stopScanDelegate(true, "Scan Stopped");
             }, new
             {
                 eventName = "stopScan",
