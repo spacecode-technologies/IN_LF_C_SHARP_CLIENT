@@ -61,6 +61,7 @@ namespace LF_SOCKET_CLIENT
         public deviceRefreshDel deviceRefreshDelegate;
         public refreshTagDel refreshTagDelegate;
 
+        // this function is to stablish the connection with spacecode
         public async Task<bool> init()
         {
             socketClient = new SocketIO(ConfigurationManager.AppSettings["baseUrl"], new SocketIOOptions
@@ -88,18 +89,24 @@ namespace LF_SOCKET_CLIENT
             return true;
         }
 
+        // these are the listeners for the event calling from the socket
         private void listener()
         {
+            // when scan is getting started
             socketClient.On("receive_scanStarted", response =>
             {
                 Console.WriteLine("receive_scanStarted: "+response.ToString());
                 scanStartedDelegate(response.GetValue(0).ToString());
             });
+
+            // when tag is getting read by the reader and adding to the list, it will give the tags one by one using this event
             socketClient.On("receive_addTag", response =>
             {
                 Console.WriteLine("receive_addTag: " + response.ToString());
                 addTagsDelegate(response.GetValue(0).ToString());
             });
+
+            // when scan is getting completed
             socketClient.On("receive_scanCompleted", response =>
             {
                 Console.WriteLine("receive_scanCompleted: " + response.ToString());
@@ -127,6 +134,7 @@ namespace LF_SOCKET_CLIENT
             onSocketErrorDelegate(e);
         }
 
+        // when socket is getting conencted, it is registering the client with spacecode
         private void onSocketConnected(object sender, EventArgs e)
         {
             var connectionString = new
@@ -194,7 +202,7 @@ namespace LF_SOCKET_CLIENT
             }, connectionString);
         }
 
-
+        // in-order to connect with usb device
         public void connectUsbDevice(string socketId, string deviceId)
         {
             socketClient.EmitAsync("send_connectDevice", response => {
@@ -221,6 +229,7 @@ namespace LF_SOCKET_CLIENT
             });
         }
         
+        // in-order to connect with ethernet device
         public void connectEthDevice(string deviceId)
         {
             Console.WriteLine(selectedServiceSocketId);
@@ -245,6 +254,7 @@ namespace LF_SOCKET_CLIENT
             });
         }
 
+        // to disconnect the usb device
         public void disconnectDeviceUsb(string socketId)
         {
             ledOff();
@@ -260,6 +270,7 @@ namespace LF_SOCKET_CLIENT
             });
         }
 
+        // to disconnect with ethernet device
         public void disconnectDeviceEth()
         {
             ledOff();
@@ -276,6 +287,8 @@ namespace LF_SOCKET_CLIENT
                 deviceId = deviceSerialNumber
             });
         }
+        
+        // to start scan
         public void startScan(string scanMode)
         {
             Console.WriteLine(selectedServiceSocketId);
@@ -298,6 +311,7 @@ namespace LF_SOCKET_CLIENT
             
         }
 
+        // to stop scan
         public void stopScan()
         {
             socketClient.EmitAsync("generic", response =>
@@ -312,6 +326,7 @@ namespace LF_SOCKET_CLIENT
             });
         }
 
+        // to turn on the selected led
         public void ledOn(List<string> list)
         {
             socketClient.EmitAsync("generic", response =>
@@ -331,6 +346,7 @@ namespace LF_SOCKET_CLIENT
             });
         }
 
+        // to turn off the leds
         public void ledOff()
         {
             socketClient.EmitAsync("generic", response =>
@@ -348,6 +364,8 @@ namespace LF_SOCKET_CLIENT
             });
         }
 
+
+        // to refresh the device list
         internal void deviceRefresh()
         {
             socketClient.EmitAsync("generic", response =>
@@ -378,6 +396,7 @@ namespace LF_SOCKET_CLIENT
             });
         }
 
+        // to refresh the tags when the scanning is in continues mode
         public void refreshTag()
         {
             Console.WriteLine("Refresh tag triggered");
