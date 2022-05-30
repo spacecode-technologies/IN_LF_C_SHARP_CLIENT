@@ -189,6 +189,7 @@ namespace LF_SOCKET_CLIENT
                                 }
                             }, new
                             {
+                                type = "socket",
                                 eventName = "getDevices",
                                 socketId = socketId
                             });
@@ -224,6 +225,7 @@ namespace LF_SOCKET_CLIENT
                 connectDeviceUsbDelegate(status, message);
             }, new
             {
+                type = "socket",
                 socketId,
                 deviceId
             });
@@ -249,6 +251,7 @@ namespace LF_SOCKET_CLIENT
                 connectDeviceEthDelegate(status, message);
             }, new
             {
+                type = "socket",
                 socketId = selectedServiceSocketId,
                 deviceId,
             });
@@ -264,6 +267,7 @@ namespace LF_SOCKET_CLIENT
                 disconnectDeviceUsbDelegate(true, message);
             }, new
             {
+                type = "socket",
                 eventName = "disconnectDevice",
                 socketId = socketId,
                 deviceId = deviceSerialNumber
@@ -282,6 +286,7 @@ namespace LF_SOCKET_CLIENT
                 disconnectDeviceEthDelegate(true, message);
             }, new
             {
+                type = "socket",
                 eventName = "disconnectDevice",
                 socketId = selectedServiceSocketId,
                 deviceId = deviceSerialNumber
@@ -303,6 +308,7 @@ namespace LF_SOCKET_CLIENT
             },
             new
             {
+                type = "socket",
                 eventName = "startScan",
                 scanMode = scanMode,
                 deviceId = deviceSerialNumber,
@@ -320,6 +326,7 @@ namespace LF_SOCKET_CLIENT
                 stopScanDelegate(true, "Scan Stopped");
             }, new
             {
+                type = "socket",
                 eventName = "stopScan",
                 deviceId = deviceSerialNumber,
                 socketId = selectedServiceSocketId
@@ -338,6 +345,7 @@ namespace LF_SOCKET_CLIENT
                 ledOnDelegate(status, message);
             }, new
             {
+                type = "socket",
                 eventName = "ledOn",
                 socketId = selectedServiceSocketId,
                 mode = mode,
@@ -358,6 +366,7 @@ namespace LF_SOCKET_CLIENT
                 ledOffDelegate(status, message);
             }, new
             {
+                type = "socket",
                 eventName = "ledOff",
                 socketId = selectedServiceSocketId,
                 deviceId = deviceSerialNumber
@@ -391,6 +400,7 @@ namespace LF_SOCKET_CLIENT
                 }
             }, new
             {
+                type = "socket",
                 eventName = "getDevices",
                 socketId = selectedServiceSocketId
             });
@@ -408,6 +418,7 @@ namespace LF_SOCKET_CLIENT
                 refreshTagDelegate(true, message);
             }, new
             {
+                type = "socket",
                 eventName = "refreshTags",
                 socketId = selectedServiceSocketId,
                 deviceId = deviceSerialNumber
